@@ -1,0 +1,46 @@
+{{ define "index" }}
+    {{ block "header" . }}{{ end }}
+    <body>
+    <div class="p-5">
+        <h1 class="max-w-sm mx-auto text-xl mb-10 font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+            Dashboard
+        </h1>
+        <button class="mb-5 text-white bg-orange-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-orange-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                hx-get="/modal-transaction" hx-target="body" hx-swap="beforeend">+
+        </button>
+        {{range .Transactions}}
+            <div class="flex flex-col items-center justify-center w-full max-w-2xl mx-auto mb-5 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <div class="flex flex-col items-center justify-center w-full p-6 space-y-4">
+                    <div class="flex items-center justify-between w-full">
+                        <div class="flex items-center space-x-2">
+                            <img src="/images/transaction.svg" class="w-8 h-8" alt="Transaction"/>
+                            <span class="text-lg font-semibold dark:text-white">{{ .CategoryID }}</span>
+                            <span class="text-lg font-semibold dark:text-white">
+                                {{ if eq .Type "expense" }}
+                                    -
+                                {{ else }}
+                                    +
+                                {{ end }}
+                                {{ .Amout }}€
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{end}}
+    </div>
+    </body>
+    {{ template "footer" . }}
+    {{ template "script" . }}
+{{ end }}
+
+<div id="modal-transaction" _="on closeModal add .closing then wait for animationend then remove me">
+    <div class="modal-underlay" _="on click trigger closeModal"></div>
+    <div class="modal-content">
+        <form class="max-w-sm mx-auto" id="transaction" hx-post="/transaction" hx-target="#error"
+              hx-swap="innerHTML" hx-ext="json-enc">
+
+        </form>
+        <button class="btn danger" _="on click trigger closeModal">Close</button>
+    </div>
+</div>

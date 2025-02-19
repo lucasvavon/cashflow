@@ -1,0 +1,6 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: go-app-env
+data:
+  DATABASE_URL: "postgresql://admin:admin@localhost:5432/myapp"
