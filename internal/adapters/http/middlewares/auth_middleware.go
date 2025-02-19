@@ -1,21 +1,30 @@
 package middlewares
 
-/*func AuthMiddleware(ss *services.SessionService) fiber.Handler {
-	return func(c *fiber.Ctx) error {
-		sessionID := c.Cookies("session_id")
-		if sessionID == "" {
-			return c.Redirect("/login", http.StatusFound)
-		}
+import (
+	"fmt"
+	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v5"
+	"os"
+)
 
-		userID, err := ss.ValidateSession(c.Context(), sessionID)
-		if err != nil {
-			return c.Redirect("/login", http.StatusFound)
-		}
+var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
 
-		// Stocker l'userID dans le contexte
-		c.Locals("userID", userID)
-
-		// Passer au handler suivant
-		return c.Next()
+func JWTMiddleware(c *fiber.Ctx) error {
+	tokenString := c.Get("Authorization")
+	if tokenString == "" {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Token missing"})
 	}
-}*/
+
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method")
+		}
+		return jwtSecret, nil
+	})
+
+	if err != nil || !token.Valid {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid token"})
+	}
+
+	return c.Next()
+}
