@@ -1,9 +1,9 @@
 package services
 
 import (
-	"cashflow-backend/internal/core/entities"
-	"cashflow-backend/internal/ports"
-	"cashflow-backend/utils"
+	"cashflow-go/internal/core/entities"
+	"cashflow-go/internal/ports"
+	"cashflow-go/utils"
 	"golang.org/x/crypto/bcrypt"
 )
 

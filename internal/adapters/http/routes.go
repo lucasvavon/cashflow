@@ -1,8 +1,8 @@
 package http
 
 import (
-	"cashflow-backend/internal/adapters/http/handlers"
-	"cashflow-backend/internal/core/services"
+	"cashflow-go/internal/adapters/http/handlers"
+	"cashflow-go/internal/core/services"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -18,7 +18,11 @@ func InitRoutes(app *fiber.App, us *services.UserService, ts *services.Transacti
 	 */
 	// Routes
 	app.Get("/", func(c *fiber.Ctx) error {
-		return transactionHandler.GetTransactions(c, c.Locals("userID").(uint))
+		id, ok := c.Locals("userID").(uint)
+		if ok {
+			return transactionHandler.GetTransactions(c, id)
+		}
+		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"error": "Locals can't be converted to uint"})
 	})
 
 	app.Post("/registration", func(c *fiber.Ctx) error {

@@ -1,7 +1,7 @@
 package ports
 
 import (
-	"cashflow-backend/internal/core/entities"
+	"cashflow-go/internal/core/entities"
 )
 
 type TransactionRepository interface {

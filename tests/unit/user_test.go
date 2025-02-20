@@ -1,8 +1,8 @@
 package unit
 
 import (
-	"cashflow-backend/internal/adapters/repositories/mock"
-	"cashflow-backend/internal/core/entities"
+	"cashflow-go/internal/adapters/repositories/mock"
+	"cashflow-go/internal/core/entities"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

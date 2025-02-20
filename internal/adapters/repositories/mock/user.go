@@ -1,7 +1,7 @@
 package mock
 
 import (
-	"cashflow-backend/internal/core/entities"
+	"cashflow-go/internal/core/entities"
 	"errors"
 )
 
@@ -23,7 +23,7 @@ func (m *MockUserRepository) GetUsers() (*entities.Users, error) {
 // GetUserByID return user by id
 func (m *MockUserRepository) GetUserByID(id int) (*entities.User, error) {
 	for _, user := range *m.Users {
-		if user.ID == id {
+		if user.ID == uint(id) {
 			return &user, nil
 		}
 	}
@@ -55,7 +55,7 @@ func (m *MockUserRepository) UpdateUser(id int, user *entities.User) error {
 		return m.UpdateError
 	}
 	for i, u := range *m.Users {
-		if u.ID == id {
+		if u.ID == uint(id) {
 			(*m.Users)[i] = *user
 			return nil
 		}
@@ -69,7 +69,7 @@ func (m *MockUserRepository) DeleteUser(id int) error {
 		return m.DeleteError
 	}
 	for i, user := range *m.Users {
-		if user.ID == id {
+		if user.ID == uint(id) {
 			*m.Users = append((*m.Users)[:i], (*m.Users)[i+1:]...)
 			return nil
 		}

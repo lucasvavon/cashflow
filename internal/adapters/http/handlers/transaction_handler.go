@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"cashflow-backend/internal/core/services"
+	"cashflow-go/internal/core/services"
 	"github.com/gofiber/fiber/v2"
 )
 

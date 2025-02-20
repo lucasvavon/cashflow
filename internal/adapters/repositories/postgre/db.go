@@ -1,7 +1,7 @@
 package postgre
 
 import (
-	"cashflow-backend/internal/core/entities"
+	"cashflow-go/internal/core/entities"
 	"fmt"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"

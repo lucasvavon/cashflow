@@ -1,8 +1,8 @@
 package services
 
 import (
-	"cashflow-backend/internal/core/entities"
-	"cashflow-backend/internal/ports"
+	"cashflow-go/internal/core/entities"
+	"cashflow-go/internal/ports"
 )
 
 type TransactionService struct {

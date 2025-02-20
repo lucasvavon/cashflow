@@ -1,2 +1,1 @@
-# Auth sample app with Hexagonal Architecture
-# cashflow-go
+# cashflow-go, a simple budget tracker in go
