@@ -12,15 +12,11 @@ type Templates struct {
 }
 
 func (t *Templates) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
-	if dataMap, ok := data.(map[string]interface{}); ok {
-		dataMap["userID"] = c.Get("userID")
-	}
-
 	return t.templates.ExecuteTemplate(w, name, data)
 }
 
 func NewTemplate() (*Templates, error) {
-	tmpl, err := template.ParseGlob("web/views/*.gohtml")
+	tmpl, err := template.ParseGlob("views/*.html")
 	if err != nil {
 		return nil, fmt.Errorf("error loading templates: %w", err)
 	}

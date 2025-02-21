@@ -1,6 +1,6 @@
 {{ define "registration" }}
-    {{ block "header" . }}{{ end }}
-    <body>
+{{ block "header" . }}{{ end }}
+<main class="flex-grow">
     <div class="p-5">
         <h1 class="max-w-sm mx-auto text-xl mb-10 font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
             Create an account
@@ -36,9 +36,9 @@
                 </div>
                 <div class="ml-3 text-sm">
                     <label for="terms" class="font-light text-gray-500 dark:text-gray-300">I accept the <a
-                                class="font-medium text-orange-600 hover:underline dark:text-primary-500" href="#">Terms
-                            and
-                            Conditions</a></label>
+                            class="font-medium text-orange-600 hover:underline dark:text-primary-500" href="#">Terms
+                        and
+                        Conditions</a></label>
                 </div>
             </div>
             <button type="submit"
@@ -48,13 +48,13 @@
             <p class="text-sm font-light text-gray-500 dark:text-gray-400">
                 Already have an account? <a href="/login"
                                             class="font-medium text-orange-600 hover:underline dark:text-primary-500">Login
-                    here</a>
+                here</a>
             </p>
         </form>
     </div>
-    {{ block "footer" . }}{{ end }}
-    {{ block "script" . }}{{ end }}
-    </body>
+</main>
+{{ block "footer" . }}{{ end }}
+{{ block "script" . }}{{ end }}
 {{ end }}
 
 

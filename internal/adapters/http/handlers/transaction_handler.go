@@ -2,7 +2,9 @@ package handlers
 
 import (
 	"cashflow-go/internal/core/services"
-	"github.com/gofiber/fiber/v2"
+	"fmt"
+	"github.com/labstack/echo/v4"
+	"net/http"
 )
 
 type TransactionHandler struct {
@@ -15,16 +17,19 @@ func NewTransactionHandler(ts *services.TransactionService) *TransactionHandler 
 	}
 }
 
-func (th *TransactionHandler) GetTransactions(c *fiber.Ctx, userID uint) error {
-	/*userID, ok := c.Locals("userID").(uint)
-	if !ok {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Unauthorized"})
-	}*/
+func (th *TransactionHandler) GetTransactions(c echo.Context) error {
+	userID, ok := c.Get("user_id").(uint)
+	fmt.Printf("\n\nuser_id: %v\n\n\n", userID)
+	if !ok || userID == 0 {
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Unauthorized"})
+	}
 
 	trs, err := th.ts.GetTransactions(userID)
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Transactions not found"})
+		return c.JSON(404, map[string]string{"error": "Transactions not found"})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(trs)
+	return c.Render(200, "dashboard", map[string]interface{}{
+		"Transactions": trs,
+	})
 }

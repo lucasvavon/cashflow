@@ -4,6 +4,7 @@ import (
 	"cashflow-go/internal/core/entities"
 	"cashflow-go/internal/ports"
 	"cashflow-go/utils"
+	"fmt"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -71,11 +72,12 @@ func (s *UserService) DeleteUser(id uint) error {
 
 func (s *UserService) Authenticate(email, password string) (string, error) {
 	user, err := s.repo.FindUserByEmail(email)
-	if err != nil {
-		return "", err
+
+	if err != nil || user == nil {
+		return "", fmt.Errorf("user not found")
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	err = s.checkPassword(user.Password, password)
 	if err != nil {
 		return "", err
 	}
@@ -86,4 +88,8 @@ func (s *UserService) Authenticate(email, password string) (string, error) {
 	}
 
 	return token, nil
+}
+
+func (s *UserService) checkPassword(hashedPassword, password string) error {
+	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 }

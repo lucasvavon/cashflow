@@ -1,34 +1,33 @@
 {{ define "header" }}
-    <!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <title>Cashflow</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
-        <link rel="stylesheet" href="/css/index.css"/>
-    </head>
-    <body class="dark:bg-gray-800 h-screen">
-    <header class="">
-        <nav>
-            <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-                <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
-                    <img src="/images/logo.svg" class="h-8" alt="Logo"/>
-                    <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Auth sample app</span>
-                </a>
-
-                <!-- Links for authenticated user -->
-                <form id="logout" method="post" class="flex items-center" hx-post="/logout">
-                    <button type="submit" value="Sign out"><img width="40" src="/images/signout.svg"></button>
-                </form>
-
-                <!-- Links for non-authenticated user -->
-                <div class="flex items-center gap-3 font-medium text-orange-600"><a href="/login">Sign in</a><a
-                            class="rounded-lg px-2 py-1 border border-orange-600 hover:text-white hover:bg-orange-600"
-                            href="/registration">Sign up</a></div>
-
-            </div>
-        </nav>
-    </header>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>auth-sample-app</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script>
+</head>
+<body class="min-h-screen flex flex-col justify-between bg-gray-100 dark:bg-gray-800">
+<header>
+    <nav>
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
+                <img src="/static/images/logo.png" class="h-8" alt="Logo"/>
+                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Cashflow</span>
+            </a>
+            {{ if .userID }}
+            <form id="logout" method="post" class="flex items-center" hx-post="/logout">
+                <button type="submit" value="Sign out"><img width="40" src="/static/images/signout.svg" alt=""></button>
+            </form>
+            {{ else }}
+            <div class="flex items-center gap-3 font-medium text-orange-600"><a href="/login">Sign in</a><a
+                    class="rounded-lg px-2 py-1 border border-orange-600 hover:text-white hover:bg-orange-600"
+                    href="/registration">Sign up</a></div>
+            {{ end }}
+        </div>
+    </nav>
+</header>
 {{ end }}

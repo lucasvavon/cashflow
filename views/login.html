@@ -1,6 +1,6 @@
 {{ define "login" }}
-    {{ block "header" . }}{{ end }}
-
+{{ block "header" . }}{{ end }}
+<main class="flex-grow">
     <div class="p-5">
         <h1 class="max-w-sm mx-auto text-xl mb-10 font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
             Login
@@ -31,7 +31,7 @@
             </p>
         </form>
     </div>
-
-    {{ block "footer" . }}{{ end }}
-    {{ block "script" . }}{{ end }}
+</main>
+{{ block "footer" . }}{{ end }}
+{{ block "script" . }}{{ end }}
 {{ end }}

@@ -1,4 +1,4 @@
-package postgre
+package gorm
 
 import (
 	"cashflow-go/internal/core/entities"
@@ -42,10 +42,9 @@ func (r *GormUserRepository) FindUserByEmail(email string) (*entities.User, erro
 	var user entities.User
 
 	req := r.db.First(&user, "email = ?", email)
-
 	if req.Error != nil {
 		if errors.Is(req.Error, gorm.ErrRecordNotFound) {
-			return nil, nil
+			return nil, req.Error
 		}
 		return nil, fmt.Errorf("error fetching user: %v", req.Error)
 	}

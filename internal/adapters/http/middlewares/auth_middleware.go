@@ -1,30 +1,36 @@
 package middlewares
 
 import (
-	"fmt"
-	"github.com/gofiber/fiber/v2"
+	"cashflow-go/utils"
 	"github.com/golang-jwt/jwt/v5"
-	"os"
+	"github.com/labstack/echo/v4"
+	"net/http"
 )
 
-var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
+func AuthMiddleware() echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
 
-func JWTMiddleware(c *fiber.Ctx) error {
-	tokenString := c.Get("Authorization")
-	if tokenString == "" {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Token missing"})
-	}
+			cookie, err := c.Cookie("token")
+			if err != nil {
+				return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Missing token"})
+			}
+			tokenString := cookie.Value
 
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("unexpected signing method")
+			token, err := utils.CheckJWT(tokenString)
+
+			if err != nil || !token.Valid {
+				return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid token"})
+			}
+
+			claims, ok := token.Claims.(jwt.MapClaims)
+			if !ok {
+				return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid claims"})
+			}
+
+			c.Set("user_id", uint(claims["user_id"].(float64)))
+
+			return next(c)
 		}
-		return jwtSecret, nil
-	})
-
-	if err != nil || !token.Valid {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid token"})
 	}
-
-	return c.Next()
 }

@@ -1,4 +1,4 @@
-package postgre
+package gorm
 
 import (
 	"cashflow-go/internal/core/entities"

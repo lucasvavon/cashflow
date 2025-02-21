@@ -1,11 +1,5 @@
 services:
 
-  redis:
-    image: redis/redis-stack:latest
-    container_name: redis-stack
-    ports:
-      - "6379:6379"
-
   adminer:
     image: ghcr.io/shyim/adminerevo:latest
     container_name: adminerevo
@@ -18,7 +12,7 @@ services:
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: auth-sample-db
+      POSTGRES_DB: cashflow
     ports:
       - "5432:5432"
     volumes:

@@ -1,4 +1,4 @@
-package postgre
+package gorm
 
 import (
 	"cashflow-go/internal/core/entities"
@@ -29,7 +29,7 @@ func ConnectDb() *gorm.DB {
 		log.Fatal("DATABASE_URL is not set")
 	}
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn))
 
 	if err != nil {
 		fmt.Printf("Failed to connect to database! %s\n", dsn)

@@ -3,7 +3,9 @@ package handlers
 import (
 	"cashflow-go/internal/core/entities"
 	"cashflow-go/internal/core/services"
-	"github.com/gofiber/fiber/v2"
+	"github.com/labstack/echo/v4"
+	"net/http"
+	"time"
 )
 
 type AuthHandler struct {
@@ -14,17 +16,44 @@ func NewAuthHandler(us *services.UserService) *AuthHandler {
 	return &AuthHandler{us}
 }
 
-func (ah *AuthHandler) Auth(c *fiber.Ctx) error {
+func (ah *AuthHandler) Login(c echo.Context) error {
 	var user entities.User
 
-	if err := c.BodyParser(&user); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request"})
+	if err := c.Bind(&user); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request"})
 	}
 
 	token, err := ah.us.Authenticate(user.Email, user.Password)
-	if err != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid credentials"})
+
+	if err != nil || token == "" {
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid credentials"})
 	}
 
-	return c.JSON(fiber.Map{"token": token})
+	cookie := new(http.Cookie)
+	cookie.Name = "token"
+	cookie.Value = token
+	cookie.HttpOnly = true
+	cookie.Expires = time.Now().Add(24 * time.Hour)
+	c.SetCookie(cookie)
+
+	if c.Request().Header.Get("HX-Request") != "" {
+		c.Response().Header().Set("HX-Redirect", "/dashboard")
+	}
+
+	return c.JSON(http.StatusOK, map[string]string{"message": "Login successful"})
+}
+
+func (ah *AuthHandler) Logout(c echo.Context) error {
+	cookie := new(http.Cookie)
+	cookie.Name = "token"
+	cookie.Value = ""
+	cookie.Expires = time.Unix(0, 0)
+	cookie.HttpOnly = true
+	c.SetCookie(cookie)
+
+	if c.Request().Header.Get("HX-Request") != "" {
+		c.Response().Header().Set("HX-Redirect", "/login")
+	}
+
+	return c.NoContent(http.StatusOK)
 }
