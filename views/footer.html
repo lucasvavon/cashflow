@@ -1,6 +1,6 @@
 {{ define "footer" }}
 <footer>
-    <div class="flex justify-center items-center h-16 bg-gray-800 text-white b-0">
+    <div class="flex justify-center items-center h-16 b-0">
         <p>&copy; 2025 Cashflow</p>
 
     </div>
@@ -27,6 +27,14 @@
             }
         })
     })
+
+    function openModal() {
+        document.querySelector('.fixed').classList.remove('hidden');
+    }
+
+    function closeModal() {
+        document.querySelector('.fixed').classList.add('hidden');
+    }
 </script>
 {{ end }}
 

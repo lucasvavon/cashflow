@@ -10,13 +10,13 @@
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
     <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script>
 </head>
-<body class="min-h-screen flex flex-col justify-between bg-gray-100 dark:bg-gray-800">
+<body class="min-h-screen max-w-screen-xl mx-auto flex flex-col justify-between bg-gray-100">
 <header>
     <nav>
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
                 <img src="/static/images/logo.png" class="h-8" alt="Logo"/>
-                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Cashflow</span>
+                <span class="self-center text-2xl font-semibold whitespace-nowrap">Cashflow</span>
             </a>
             {{ if .userID }}
             <form id="logout" method="post" class="flex items-center" hx-post="/logout">

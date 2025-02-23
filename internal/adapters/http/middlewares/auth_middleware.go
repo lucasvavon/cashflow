@@ -13,7 +13,7 @@ func AuthMiddleware() echo.MiddlewareFunc {
 
 			cookie, err := c.Cookie("token")
 			if err != nil {
-				return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Missing token"})
+				return c.Redirect(http.StatusSeeOther, "/login")
 			}
 			tokenString := cookie.Value
 
@@ -28,6 +28,7 @@ func AuthMiddleware() echo.MiddlewareFunc {
 				return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid claims"})
 			}
 
+			c.Set("user_id", uint(claims["user_id"].(float64)))
 			c.Set("user_id", uint(claims["user_id"].(float64)))
 
 			return next(c)

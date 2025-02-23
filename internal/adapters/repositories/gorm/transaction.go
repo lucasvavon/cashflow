@@ -17,7 +17,13 @@ func NewGormTransactionRepository(db *gorm.DB) *GormTransactionRepository {
 func (gtr *GormTransactionRepository) GetTransactions(userID uint) (*entities.Transactions, error) {
 	var transactions entities.Transactions
 
-	err := gtr.db.Where("user_id = ?", userID).Find(&transactions).Error
+	err := gtr.db.Select("transactions.*, categories.name, categories.logo").
+		Joins("JOIN categories ON categories.id = transactions.category_id").
+		Where("transactions.user_id = ?", userID).
+		Order("transactions.created_at DESC").
+		Preload("Category").
+		Find(&transactions).Error
+
 	if err != nil {
 		return nil, fmt.Errorf("transactions not found: %v", err)
 	}
