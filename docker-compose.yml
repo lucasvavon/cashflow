@@ -6,7 +6,7 @@ services:
     ports:
       - "8080:8080"
 
-  db:
+  cashflow-db:
     image: postgres:latest
     container_name: db
     environment:
