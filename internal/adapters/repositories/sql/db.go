@@ -37,14 +37,15 @@ func ConnectDb() *gorm.DB {
 
 	errMi := db.AutoMigrate(&entities.User{}, &entities.Category{}, &entities.Transaction{}, &entities.Frequency{}, &entities.TransactionType{})
 	db.Clauses(clause.OnConflict{DoNothing: true}).Create([]entities.Frequency{
-		{Value: "annual"},
-		{Value: "monthly"},
-		{Value: "weekly"},
-		{Value: "daily"},
+		{Name: "one-time"},
+		{Name: "annual"},
+		{Name: "monthly"},
+		{Name: "weekly"},
+		{Name: "daily"},
 	})
 	db.Clauses(clause.OnConflict{DoNothing: true}).Create([]entities.TransactionType{
-		{Value: "income"},
-		{Value: "expense"},
+		{Name: "income"},
+		{Name: "expense"},
 	})
 
 	if errMi != nil {

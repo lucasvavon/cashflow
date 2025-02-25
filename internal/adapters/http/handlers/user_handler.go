@@ -19,10 +19,10 @@ func NewUserHandler(us *services.UserService) *UserHandler {
 }
 
 func (uh *UserHandler) GetUsers(c echo.Context) error {
-	users, err := uh.us.Users()
+	users, err := uh.us.FindAllUsers()
 
 	if err != nil {
-		return c.JSON(404, map[string]string{"error": "Users not found"})
+		return c.JSON(404, map[string]string{"error": "FindAllUsers not found"})
 	}
 
 	return c.JSON(200, users)

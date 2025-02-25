@@ -24,12 +24,14 @@ func main() {
 	// init store repositories
 	userStore := sql.NewGormUserRepository(db)
 	transactionStore := sql.NewGormTransactionRepository(db)
+	frequencyStore := sql.NewGormFrequencyRepository(db)
 
 	// init services
 	userService := services.NewUserService(userStore)
 	transactionService := services.NewTransactionService(transactionStore)
+	frequencyService := services.NewFrequencyService(frequencyStore)
 
-	routes.InitRoutes(e, userService, transactionService)
+	routes.InitRoutes(e, userService, transactionService, frequencyService)
 
 	e.Logger.Fatal(e.Start("localhost:1323"))
 }

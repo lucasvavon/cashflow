@@ -16,7 +16,7 @@ func NewUserService(repo ports.UserRepository) *UserService {
 	return &UserService{repo: repo}
 }
 
-func (s *UserService) Users() (*entities.Users, error) {
+func (s *UserService) FindAllUsers() (*entities.Users, error) {
 	return s.repo.FindAllUsers()
 }
 

@@ -10,7 +10,6 @@ type (
 		UserID            uint            `json:"user_id" sql:"not null"`
 		Amount            float32         `json:"amount" sql:"not null"`
 		Description       string          `json:"description"`
-		Recurring         bool            `sql:"default:false"`
 		FrequencyID       uint            `json:"frequency_id" sql:"default:null"`
 		Frequency         Frequency       `sql:"foreignKey:FrequencyID;references:ID"`
 		CategoryID        uint            `json:"category_id" sql:"index;not null"`

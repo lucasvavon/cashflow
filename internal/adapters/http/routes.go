@@ -8,11 +8,11 @@ import (
 	"net/http"
 )
 
-func InitRoutes(e *echo.Echo, us *services.UserService, ts *services.TransactionService) {
+func InitRoutes(e *echo.Echo, us *services.UserService, ts *services.TransactionService, fs *services.FrequencyService) {
 
 	// handlers
 	userHandler := handlers.NewUserHandler(us)
-	transactionHandler := handlers.NewTransactionHandler(ts)
+	transactionHandler := handlers.NewTransactionHandler(ts, fs)
 	authHandler := handlers.NewAuthHandler(us)
 
 	// middlewares
@@ -30,8 +30,6 @@ func InitRoutes(e *echo.Echo, us *services.UserService, ts *services.Transaction
 	e.POST("/login", authHandler.Login)
 	e.GET("/login", func(c echo.Context) error {
 		_, err := c.Cookie("token")
-
-		// TODO check invalid token
 		if err == nil {
 			return c.Redirect(http.StatusSeeOther, "/dashboard")
 		}
