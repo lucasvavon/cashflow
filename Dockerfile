@@ -9,10 +9,10 @@ RUN go mod download
 
 COPY . .
 
-ENV DATABASE_URL="postgresql://admin:admin@db:5432/myapp"
+ENV DATABASE_URL="postgresql://admin:admin@localhost:5432/cashflow"
 
-RUN go build -o auth-sample-app ./main.go
+RUN go build -o cashflow ./main.go
 
 EXPOSE 1323
 
-ENTRYPOINT ["/app/auth-sample-app"]
+ENTRYPOINT ["/app/cashflow"]

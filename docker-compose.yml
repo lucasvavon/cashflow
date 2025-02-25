@@ -6,9 +6,9 @@ services:
     ports:
       - "8080:8080"
 
-  cashflow-db:
+  db:
     image: postgres:latest
-    container_name: db
+    container_name: postgres
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
@@ -16,7 +16,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - db-data:/var/lib/sql/data
 
 volumes:
   db-data:

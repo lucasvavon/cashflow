@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: go-app-env
 data:
-  DATABASE_URL: "postgresql://admin:admin@localhost:5432/myapp"
+  DATABASE_URL: "sql://admin:admin@localhost:5432/myapp"

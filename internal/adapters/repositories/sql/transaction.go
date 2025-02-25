@@ -1,4 +1,4 @@
-package gorm
+package sql
 
 import (
 	"cashflow-go/internal/core/entities"
@@ -17,15 +17,15 @@ func NewGormTransactionRepository(db *gorm.DB) *GormTransactionRepository {
 func (gtr *GormTransactionRepository) GetTransactions(userID uint) (*entities.Transactions, error) {
 	var transactions entities.Transactions
 
-	err := gtr.db.Select("transactions.*, categories.name, categories.logo").
-		Joins("categories").
+	r := gtr.db.Select("transactions.*, categories.name, categories.logo").
+		Joins("LEFT JOIN categories ON categories.id = transactions.category_id").
 		Where("transactions.user_id = ?", userID).
 		Order("transactions.updated_at DESC").
 		Preload("Category").
-		Find(&transactions).Error
+		Find(&transactions)
 
-	if err != nil {
-		return nil, fmt.Errorf("transactions not found: %v", err)
+	if r.Error != nil {
+		return nil, fmt.Errorf("error transactions : %v", r.Error)
 	}
 
 	return &transactions, nil
@@ -38,16 +38,16 @@ func (gtr GormTransactionRepository) CreateTransaction(transaction *entities.Tra
 func (gtr GormTransactionRepository) GetTransaction(userID uint, id uint) (*entities.Transaction, error) {
 	var transaction entities.Transaction
 
-	err := gtr.db.Select("transactions.*, categories.name, categories.logo").
+	r := gtr.db.Select("transactions.*, categories.name, categories.logo").
 		Joins("JOIN categories ON categories.id = transactions.category_id").
 		Where("transactions.user_id = ?", userID).
 		Where("transactions.id = ?", id).
 		Order("transactions.updated_at DESC").
 		Preload("Category").
-		Find(&transaction).Error
+		Find(&transaction)
 
-	if err != nil {
-		return nil, fmt.Errorf("transactions not found: %v", err)
+	if r.Error != nil {
+		return nil, fmt.Errorf("error transactions : %v", r.Error)
 	}
 
 	return &transaction, nil
@@ -56,16 +56,16 @@ func (gtr GormTransactionRepository) GetTransaction(userID uint, id uint) (*enti
 func (gtr GormTransactionRepository) GetTransactionsByDateRange(userID uint, startDate string, endDate string) (*entities.Transactions, error) {
 	var transactions entities.Transactions
 
-	err := gtr.db.Select("transactions.*, categories.name, categories.logo").
+	r := gtr.db.Select("transactions.*, categories.name, categories.logo").
 		Joins("JOIN categories ON categories.id = transactions.category_id").
 		Where("transactions.user_id = ?", userID).
 		Where("transactions.updated_at BETWEEN ? AND ?", startDate, endDate).
 		Order("transactions.updated_at DESC").
 		Preload("Category").
-		Find(&transactions).Error
+		Find(&transactions)
 
-	if err != nil {
-		return nil, fmt.Errorf("transactions not found: %v", err)
+	if r.Error != nil {
+		return nil, fmt.Errorf("transactions not found : %v", r.Error)
 	}
 
 	return &transactions, nil
@@ -74,16 +74,16 @@ func (gtr GormTransactionRepository) GetTransactionsByDateRange(userID uint, sta
 func (gtr GormTransactionRepository) GetTransactionsByCategory(userID uint, category entities.Category) (*entities.Transactions, error) {
 	var transactions entities.Transactions
 
-	err := gtr.db.Select("transactions.*, categories.name, categories.logo").
+	r := gtr.db.Select("transactions.*, categories.name, categories.logo").
 		Joins("JOIN categories ON categories.id = transactions.category_id").
 		Where("transactions.user_id = ?", userID).
 		Where("categories. = ?", category).
 		Order("transactions.updated_at DESC").
 		Preload("Category").
-		Find(&transactions).Error
+		Find(&transactions)
 
-	if err != nil {
-		return nil, fmt.Errorf("transactions not found: %v", err)
+	if r.Error != nil {
+		return nil, fmt.Errorf("transactions not found: %v", r.Error)
 	}
 
 	return &transactions, nil

@@ -4,5 +4,5 @@ import "gorm.io/gorm"
 
 type Frequency struct {
 	gorm.Model
-	Value string `gorm:"unique;not null"`
+	Value string `sql:"unique;not null"`
 }

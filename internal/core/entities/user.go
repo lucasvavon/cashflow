@@ -9,10 +9,10 @@ import (
 type (
 	User struct {
 		gorm.Model
-		Email           string        `json:"email" gorm:"unique;not null"`
-		Password        string        `json:"password" gorm:"not null"`
-		ConfirmPassword string        `json:"confirm-password" gorm:"-"`
-		Transactions    []Transaction `gorm:"foreignKey:UserID"`
+		Email           string        `json:"email" sql:"unique;not null"`
+		Password        string        `json:"password" sql:"not null"`
+		ConfirmPassword string        `json:"confirm-password" sql:"-"`
+		Transactions    []Transaction `sql:"foreignKey:UserID"`
 	}
 
 	Users []User

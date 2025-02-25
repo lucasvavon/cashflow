@@ -29,7 +29,6 @@ func AuthMiddleware() echo.MiddlewareFunc {
 			}
 
 			c.Set("user_id", uint(claims["user_id"].(float64)))
-			c.Set("user_id", uint(claims["user_id"].(float64)))
 
 			return next(c)
 		}

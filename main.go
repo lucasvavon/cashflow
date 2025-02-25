@@ -2,7 +2,7 @@ package main
 
 import (
 	routes "cashflow-go/internal/adapters/http"
-	"cashflow-go/internal/adapters/repositories/gorm"
+	"cashflow-go/internal/adapters/repositories/sql"
 	"cashflow-go/internal/core/services"
 	"cashflow-go/views"
 	"github.com/labstack/echo/v4"
@@ -18,12 +18,12 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	// conn to postgresgl instance
-	db := gorm.ConnectDb()
+	db := sql.ConnectDb()
 	db = db.Debug()
 
 	// init store repositories
-	userStore := gorm.NewGormUserRepository(db)
-	transactionStore := gorm.NewGormTransactionRepository(db)
+	userStore := sql.NewGormUserRepository(db)
+	transactionStore := sql.NewGormTransactionRepository(db)
 
 	// init services
 	userService := services.NewUserService(userStore)

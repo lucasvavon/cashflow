@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"cashflow-go/internal/core/services"
-	"fmt"
 	"github.com/labstack/echo/v4"
 	"net/http"
 )
@@ -19,17 +18,22 @@ func NewTransactionHandler(ts *services.TransactionService) *TransactionHandler 
 
 func (th *TransactionHandler) GetTransactions(c echo.Context) error {
 	userID, ok := c.Get("user_id").(uint)
-	fmt.Printf("\n\nuser_id: %v\n\n\n", userID)
+
 	if !ok || userID == 0 {
 		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Unauthorized"})
 	}
 
-	trs, err := th.ts.GetTransactions(userID)
+	transactions, err := th.ts.GetTransactions(userID)
 	if err != nil {
 		return c.JSON(404, map[string]string{"error": "Transactions not found"})
 	}
 
 	return c.Render(200, "dashboard", map[string]interface{}{
-		"Transactions": trs,
+		"Transactions": transactions,
 	})
+}
+
+func (th *TransactionHandler) CreateTransaction(c echo.Context) error {
+	//userID, ok := c.Get("user_id").(uint)
+	return nil
 }

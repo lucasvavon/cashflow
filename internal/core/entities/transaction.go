@@ -7,16 +7,16 @@ import (
 type (
 	Transaction struct {
 		gorm.Model
-		UserID            uint            `json:"user_id" gorm:"not null"`
-		Amount            float32         `json:"amount" gorm:"not null"`
+		UserID            uint            `json:"user_id" sql:"not null"`
+		Amount            float32         `json:"amount" sql:"not null"`
 		Description       string          `json:"description"`
-		Recurring         bool            `gorm:"default:false"`
-		FrequencyID       uint            `json:"frequency_id" gorm:"default:null"`
-		Frequency         Frequency       `gorm:"foreignKey:FrequencyID;references:ID"`
-		CategoryID        uint            `json:"category_id" gorm:"index;not null"`
-		Category          Category        `gorm:"foreignKey:CategoryID;references:ID"`
-		TransactionTypeID uint            `json:"trans_type_id" gorm:"index;not null"`
-		TransactionType   TransactionType `gorm:"foreignKey:TransactionTypeID;references:ID"`
+		Recurring         bool            `sql:"default:false"`
+		FrequencyID       uint            `json:"frequency_id" sql:"default:null"`
+		Frequency         Frequency       `sql:"foreignKey:FrequencyID;references:ID"`
+		CategoryID        uint            `json:"category_id" sql:"index;not null"`
+		Category          Category        `sql:"foreignKey:CategoryID;references:ID"`
+		TransactionTypeID uint            `json:"trans_type_id" sql:"index;not null"`
+		TransactionType   TransactionType `sql:"foreignKey:TransactionTypeID;references:ID"`
 	}
 
 	Transactions []Transaction

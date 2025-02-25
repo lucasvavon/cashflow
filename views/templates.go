@@ -12,11 +12,19 @@ type Templates struct {
 }
 
 func (t *Templates) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
-	return t.templates.ExecuteTemplate(w, name, data)
+	userID := c.Get("user_id")
+	isAuthenticated := userID != nil
+
+	templateData := map[string]interface{}{
+		"IsAuthenticated": isAuthenticated,
+		"UserID":          userID,
+	}
+
+	return t.templates.ExecuteTemplate(w, name, templateData)
 }
 
 func NewTemplate() (*Templates, error) {
-	tmpl, err := template.ParseGlob("views/*.html")
+	tmpl, err := template.ParseGlob("views/*.gohtml")
 	if err != nil {
 		return nil, fmt.Errorf("error loading templates: %w", err)
 	}

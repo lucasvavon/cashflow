@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>auth-sample-app</title>
+    <title>Cashflow</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
@@ -18,7 +18,7 @@
                 <img src="/static/images/logo.png" class="h-8" alt="Logo"/>
                 <span class="self-center text-2xl font-semibold whitespace-nowrap">Cashflow</span>
             </a>
-            {{ if .userID }}
+            {{ if .IsAuthenticated }}
             <form id="logout" method="post" class="flex items-center" hx-post="/logout">
                 <button type="submit" value="Sign out"><img width="40" src="/static/images/signout.svg" alt=""></button>
             </form>
