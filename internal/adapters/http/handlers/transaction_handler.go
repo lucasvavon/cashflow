@@ -1,11 +1,12 @@
 package handlers
 
 import (
+	"cashflow-go/internal/core/dto"
 	"cashflow-go/internal/core/entities"
 	"cashflow-go/internal/core/services"
-	"fmt"
 	"github.com/labstack/echo/v4"
 	"net/http"
+	"strconv"
 )
 
 type TransactionHandler struct {
@@ -24,48 +25,62 @@ func (th *TransactionHandler) GetTransactions(c echo.Context) error {
 	userID, ok := c.Get("user_id").(uint)
 
 	if !ok || userID == 0 {
-		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Unauthorized"})
+		return c.String(http.StatusUnauthorized, "Unauthorized")
 	}
 
 	transactions, err := th.ts.GetTransactions(userID)
 	if err != nil {
-		return c.JSON(404, map[string]string{"error": "Transactions not found"})
+		return c.String(http.StatusInternalServerError, "Failed to load transactions")
 	}
 
 	frequencies, err := th.fs.FindAllFrequencies()
 	if err != nil {
-		return c.JSON(500, map[string]string{"error": "Failed to load frequencies"})
+		return c.String(http.StatusInternalServerError, "Failed to load frequencies")
 	}
 
+	balance, err := th.ts.GetGlobalBalance(userID)
 	return c.Render(200, "dashboard", map[string]interface{}{
 		"Transactions": transactions,
 		"Frequencies":  frequencies,
+		"Balance":      balance,
 	})
 }
 
 func (th *TransactionHandler) CreateTransaction(c echo.Context) error {
-	transaction := new(entities.Transaction)
+	t := new(dto.TransactionDTO)
 
-	fmt.Println(c.FormValue("category"))
-	fmt.Println(c.FormValue("transaction_type"))
-	fmt.Println(c.FormValue("frequency"))
-	fmt.Println(c.FormValue("amount"))
-
-	userID, ok := c.Get("user_id").(uint)
-	if !ok || userID == 0 {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Unauthorized"})
+	if err := c.Bind(t); err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
 	}
 
-	transaction.UserID = userID
-
-	fmt.Printf("transac : %v\n\n", transaction)
-
-	if err := c.Bind(&transaction); err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	categoryID, err := strconv.ParseUint(t.CategoryID, 10, 32)
+	if err != nil {
+		return c.String(http.StatusBadRequest, "Invalid category ID")
 	}
 
-	if err := th.ts.CreateTransaction(transaction); err != nil {
-		return c.JSON(404, err.Error())
+	frequencyID, err := strconv.ParseUint(t.FrequencyID, 10, 32)
+	if err != nil {
+		return c.String(http.StatusBadRequest, "Invalid frequency ID")
+	}
+
+	amount, err := strconv.ParseFloat(t.Amount, 32)
+	if err != nil {
+		return c.String(http.StatusBadRequest, "Invalid amount")
+	}
+	
+	if t.TransactionType == "expense" {
+		amount = -amount
+	}
+
+	transaction := entities.Transaction{
+		UserID:      c.Get("user_id").(uint),
+		Amount:      float32(amount),
+		FrequencyID: uint(frequencyID),
+		CategoryID:  uint(categoryID),
+	}
+
+	if err := th.ts.CreateTransaction(&transaction); err != nil {
+		return c.String(404, err.Error())
 	}
 
 	if c.Request().Header.Get("HX-Request") != "" {

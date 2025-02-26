@@ -13,4 +13,5 @@ type TransactionRepository interface {
 	GetTransactions(userID uint) (*entities.Transactions, error)
 	UpdateTransaction(transaction *entities.Transaction) error
 	DeleteTransaction(id uint) error
+	GetGlobalBalance(id uint) (float32, error)
 }

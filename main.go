@@ -17,6 +17,7 @@ func main() {
 	e.Renderer, _ = views.NewTemplate()
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
+
 	// conn to postgresgl instance
 	db := sql.ConnectDb()
 	db = db.Debug()

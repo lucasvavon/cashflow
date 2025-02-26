@@ -44,3 +44,7 @@ func (s *TransactionService) UpdateTransaction(transaction *entities.Transaction
 func (s *TransactionService) DeleteTransaction(id uint) error {
 	return s.tr.DeleteTransaction(id)
 }
+
+func (s *TransactionService) GetGlobalBalance(id uint) (float32, error) {
+	return s.tr.GetGlobalBalance(id)
+}

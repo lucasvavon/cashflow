@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"cashflow-go/internal/core/entities"
+	"cashflow-go/internal/core/dto"
 	"cashflow-go/internal/core/services"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -17,7 +17,7 @@ func NewAuthHandler(us *services.UserService) *AuthHandler {
 }
 
 func (ah *AuthHandler) Login(c echo.Context) error {
-	var user entities.User
+	var user dto.UserDTO
 
 	if err := c.Bind(&user); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request"})

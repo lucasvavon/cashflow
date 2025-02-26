@@ -1,9 +1,11 @@
 package handlers
 
 import (
+	"cashflow-go/internal/core/dto"
 	"cashflow-go/internal/core/entities"
 	"cashflow-go/internal/core/services"
 	"github.com/labstack/echo/v4"
+	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"strconv"
 )
@@ -44,20 +46,34 @@ func (uh *UserHandler) GetUser(c echo.Context) error {
 	return c.JSON(200, user)
 }
 
-func (uh *UserHandler) PostUser(c echo.Context) error {
-	var user *entities.User
+func (uh *UserHandler) CreateUser(c echo.Context) error {
+	u := new(dto.UserDTO)
 
-	if err := c.Bind(&user); err != nil {
+	if err := c.Bind(&u); err != nil {
 		return c.JSON(404, map[string]string{"error": "Invalid request body"})
 	}
 
-	exist, _ := uh.us.FindUserByEmail(user.Email)
+	exist, _ := uh.us.FindUserByEmail(u.Email)
 
 	if exist != nil {
 		return c.JSON(404, map[string]string{"error": "user with this email already exists"})
 	}
 
-	if err := uh.us.CreateUser(user); err != nil {
+	if err := u.Validate(); err != nil {
+		return err
+	}
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+
+	user := entities.User{
+		Email:          u.Email,
+		HashedPassword: string(hashedPassword),
+	}
+
+	if err := uh.us.CreateUser(&user); err != nil {
 		return c.JSON(404, err.Error())
 	}
 

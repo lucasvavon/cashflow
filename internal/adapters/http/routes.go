@@ -26,7 +26,7 @@ func InitRoutes(e *echo.Echo, us *services.UserService, ts *services.Transaction
 		return c.Render(200, "registration", nil)
 	})
 
-	e.POST("/registration", userHandler.PostUser)
+	e.POST("/registration", userHandler.CreateUser)
 	e.POST("/login", authHandler.Login)
 	e.GET("/login", func(c echo.Context) error {
 		_, err := c.Cookie("token")

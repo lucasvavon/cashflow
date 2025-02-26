@@ -103,3 +103,9 @@ func (gtr *GormTransactionRepository) DeleteTransaction(id uint) error {
 	//TODO implement me
 	panic("implement me")
 }
+
+func (gtr *GormTransactionRepository) GetGlobalBalance(userID uint) (float32, error) {
+	var balance float32
+	err := gtr.db.Raw("SELECT COALESCE(SUM(amount), 0) FROM transactions WHERE transactions.user_id = ?", userID).Scan(&balance).Error
+	return balance, err
+}

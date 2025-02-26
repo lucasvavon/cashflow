@@ -29,25 +29,10 @@ func (s *UserService) FindUserByEmail(email string) (*entities.User, error) {
 }
 
 func (s *UserService) CreateUser(user *entities.User) error {
-
-	if err := user.Validate(); err != nil {
-		return err
-	}
-
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
-	if err != nil {
-		return err
-	}
-
-	u := entities.User{
-		Email:    user.Email,
-		Password: string(hashedPassword),
-	}
-
-	return s.repo.CreateUser(&u)
+	return s.repo.CreateUser(user)
 }
 
-func (s *UserService) UpdateUser(id uint, user *entities.User) error {
+/*func (s *UserService) UpdateUser(id uint, user *entities.User) error {
 	err := user.Validate()
 	if err != nil {
 		return err
@@ -64,7 +49,7 @@ func (s *UserService) UpdateUser(id uint, user *entities.User) error {
 	}
 
 	return s.repo.UpdateUser(id, &u)
-}
+}*/
 
 func (s *UserService) DeleteUser(id uint) error {
 	return s.repo.DeleteUser(id)
@@ -77,7 +62,7 @@ func (s *UserService) Authenticate(email, password string) (string, error) {
 		return "", fmt.Errorf("user not found")
 	}
 
-	err = s.checkPassword(user.Password, password)
+	err = s.checkPassword(user.HashedPassword, password)
 	if err != nil {
 		return "", err
 	}
