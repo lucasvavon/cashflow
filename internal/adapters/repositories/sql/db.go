@@ -36,6 +36,7 @@ func ConnectDb() *gorm.DB {
 	}
 
 	errMi := db.AutoMigrate(&entities.User{}, &entities.Category{}, &entities.Transaction{}, &entities.Frequency{}, &entities.TransactionType{})
+
 	db.Clauses(clause.OnConflict{DoNothing: true}).Create([]entities.Frequency{
 		{Name: "one-time"},
 		{Name: "annual"},
@@ -43,9 +44,24 @@ func ConnectDb() *gorm.DB {
 		{Name: "weekly"},
 		{Name: "daily"},
 	})
+	
 	db.Clauses(clause.OnConflict{DoNothing: true}).Create([]entities.TransactionType{
 		{Name: "income"},
 		{Name: "expense"},
+	})
+
+	db.Clauses(clause.OnConflict{DoNothing: true}).Create([]entities.Category{
+		{Name: "Salary", Logo: "", Description: "Monthly or bi-weekly wages from employment"},
+		{Name: "Government Benefits", Logo: "", Description: "Income from social security, unemployment, or other government programs"},
+		{Name: "Gifts & Donations", Logo: "", Description: "Money received as gifts or donations"},
+		{Name: "Other income", Logo: "", Description: "Other type of income"},
+		{Name: "Rent", Logo: "", Description: "Monthly rent payment for housing"},
+		{Name: "Groceries", Logo: "", Description: "Money spent on food and household essentials"},
+		{Name: "Transportation", Logo: "", Description: "Expenses related to fuel, public transport, or vehicle maintenance"},
+		{Name: "Entertainment", Logo: "", Description: "Spending on movies, concerts, and leisure activities"},
+		{Name: "Utilities", Logo: "", Description: "Payments for electricity, water, internet, and other utilities"},
+		{Name: "Health & Wellness", Logo: "", Description: "Medical expenses, insurance, and gym memberships"},
+		{Name: "Other Expenses", Logo: "", Description: "Miscellaneous expenses not categorized elsewhere"},
 	})
 
 	if errMi != nil {

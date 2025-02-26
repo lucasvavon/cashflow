@@ -1,9 +1,7 @@
 package entities
 
-import "gorm.io/gorm"
-
 type Frequency struct {
-	gorm.Model
+	ID   uint   `gorm:"primarykey"`
 	Name string `gorm:"unique;not null"`
 }
 

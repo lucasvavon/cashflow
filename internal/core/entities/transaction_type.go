@@ -1,8 +1,6 @@
 package entities
 
-import "gorm.io/gorm"
-
 type TransactionType struct {
-	gorm.Model
+	ID   uint   `gorm:"primarykey"`
 	Name string `gorm:"unique;not null"`
 }

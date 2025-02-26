@@ -31,11 +31,7 @@ func (gtr *GormTransactionRepository) GetTransactions(userID uint) (*entities.Tr
 	return &transactions, nil
 }
 
-func (gtr GormTransactionRepository) CreateTransaction(transaction *entities.Transaction) error {
-	return gtr.db.Create(&transaction).Error
-}
-
-func (gtr GormTransactionRepository) GetTransaction(userID uint, id uint) (*entities.Transaction, error) {
+func (gtr *GormTransactionRepository) GetTransaction(userID uint, id uint) (*entities.Transaction, error) {
 	var transaction entities.Transaction
 
 	r := gtr.db.Select("transactions.*, categories.name, categories.logo").
@@ -53,7 +49,7 @@ func (gtr GormTransactionRepository) GetTransaction(userID uint, id uint) (*enti
 	return &transaction, nil
 }
 
-func (gtr GormTransactionRepository) GetTransactionsByDateRange(userID uint, startDate string, endDate string) (*entities.Transactions, error) {
+func (gtr *GormTransactionRepository) GetTransactionsByDateRange(userID uint, startDate string, endDate string) (*entities.Transactions, error) {
 	var transactions entities.Transactions
 
 	r := gtr.db.Select("transactions.*, categories.name, categories.logo").
@@ -71,7 +67,7 @@ func (gtr GormTransactionRepository) GetTransactionsByDateRange(userID uint, sta
 	return &transactions, nil
 }
 
-func (gtr GormTransactionRepository) GetTransactionsByCategory(userID uint, category entities.Category) (*entities.Transactions, error) {
+func (gtr *GormTransactionRepository) GetTransactionsByCategory(userID uint, category entities.Category) (*entities.Transactions, error) {
 	var transactions entities.Transactions
 
 	r := gtr.db.Select("transactions.*, categories.name, categories.logo").
@@ -89,17 +85,21 @@ func (gtr GormTransactionRepository) GetTransactionsByCategory(userID uint, cate
 	return &transactions, nil
 }
 
-func (gtr GormTransactionRepository) GetTransactionsByType(userID uint, transType entities.TransactionType) (*entities.Transactions, error) {
+func (gtr *GormTransactionRepository) GetTransactionsByType(userID uint, transType entities.TransactionType) (*entities.Transactions, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (gtr GormTransactionRepository) UpdateTransaction(transaction *entities.Transaction) error {
+func (gtr *GormTransactionRepository) CreateTransaction(transaction *entities.Transaction) error {
+	return gtr.db.Create(&transaction).Error
+}
+
+func (gtr *GormTransactionRepository) UpdateTransaction(transaction *entities.Transaction) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (gtr GormTransactionRepository) DeleteTransaction(id uint) error {
+func (gtr *GormTransactionRepository) DeleteTransaction(id uint) error {
 	//TODO implement me
 	panic("implement me")
 }

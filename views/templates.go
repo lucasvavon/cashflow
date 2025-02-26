@@ -20,11 +20,19 @@ func (t *Templates) Render(w io.Writer, name string, data interface{}, c echo.Co
 		"UserID":          userID,
 	}
 
+	if dataMap, ok := data.(map[string]interface{}); ok {
+		for k, v := range dataMap {
+			templateData[k] = v
+		}
+	} else if data != nil {
+		templateData["Data"] = data
+	}
+
 	return t.templates.ExecuteTemplate(w, name, templateData)
 }
 
 func NewTemplate() (*Templates, error) {
-	tmpl, err := template.ParseGlob("views/*.gohtml")
+	tmpl, err := template.ParseGlob("views/*.html")
 	if err != nil {
 		return nil, fmt.Errorf("error loading templates: %w", err)
 	}

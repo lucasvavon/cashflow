@@ -39,5 +39,6 @@ func InitRoutes(e *echo.Echo, us *services.UserService, ts *services.Transaction
 	// protected routes
 	protected := e.Group("", authMiddleware)
 	protected.GET("/dashboard", transactionHandler.GetTransactions)
+	protected.POST("/transaction", transactionHandler.CreateTransaction)
 	protected.POST("/logout", authHandler.Logout)
 }

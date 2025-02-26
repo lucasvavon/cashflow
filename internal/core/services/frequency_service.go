@@ -15,6 +15,6 @@ func NewFrequencyService(repo ports.FrequencyRepository) *FrequencyService {
 	}
 }
 
-func (fs *FrequencyService) FindAllFrequencies() (entities.Frequencies, error) {
+func (fs *FrequencyService) FindAllFrequencies() (*entities.Frequencies, error) {
 	return fs.repo.FindAllFrequencies()
 }

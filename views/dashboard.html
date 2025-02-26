@@ -15,9 +15,9 @@
                 {{range .Transactions}}
                     <div class="flex flex-col items-center justify-center w-full max-w-2xl mx-auto mb-5 bg-white rounded-lg shadow-md">
                         <div class="flex items-center justify-between w-full p-6">
-                            <span class="text-sm text-gray-500">{{ .Category.Name }}</span>
+                            <span class="text-sm text-gray-600">{{ .Category.Name }}</span>
                             <div class="flex items-center space-x-2">
-                                <!--<span class="text-gray-500">{{ .Description }}</span>-->
+                                <!--<span class="text-gray-600">{{ .Description }}</span>-->
                                 <span class="text-lg font-semibold">
                             {{ if eq .TransactionType.Value "expense" }}
                                 -
@@ -40,33 +40,33 @@
             <div class="bg-white rounded-lg shadow-lg p-6 w-5/6 md:w-1/2 lg:w-1/3">
                 <h2 class="text-xl font-semibold mb-4">Add transaction</h2>
 
-                <form hx-post="/transactions">
+                <form id="transaction" hx-post="/transaction" hx-target="#error" hx-ext="json-enc">
                     <div class="mb-4">
                         <label for="category" class="block mb-2 text-sm font-medium text-gray-900">Category</label>
-                        <select id="category"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        <select id="category" name="category"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 block w-full p-2.5"
                                 required>
-                            <option selected>Select a category</option>
-                            <option value="1">Rent</option>
-                            <option value="2">Food</option>
+                            <option value="" selected>Select a category</option>
+                            <option value="1">Salary</option>
+                            <option value="2">Government Benefits</option>
                         </select>
                     </div>
                     <div class="mb-4">
                         <label for="transaction_type" class="block mb-2 text-sm font-medium text-gray-900">Transaction
                             type</label>
-                        <select id="transaction_type"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        <select id="transaction_type" name="transaction_type"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 block w-full p-2.5"
                                 required>
-                            <option selected>Select a type</option>
+                            <option value="" selected>Select a type</option>
                             <option value="1">Income</option>
                             <option value="2">Expense</option>
                         </select>
                     </div>
                     <div class="mb-4">
                         <label for="frequency" class="block mb-2 text-sm font-medium text-gray-900">Frequency</label>
-                        <select id="frequency"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                            <option selected>Select a frequency</option>
+                        <select id="frequency" name="frequency"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 block w-full p-2.5">
+                            <option value="" selected>Select a frequency</option>
                             {{range .Frequencies}}
                                 <option value="{{ .ID }}">{{ .Name }}</option>
                             {{end}}
@@ -74,16 +74,17 @@
                     </div>
                     <div class="mb-4">
                         <label for="amount" class="block mb-2 text-sm font-medium text-gray-900">Amout (€)</label>
-                        <input type="number" id="amount" aria-describedby="helper-text-explanation"
-                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        <input type="number" id="amount" name="amount"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 block w-full p-2.5"
                                placeholder="100" required/>
                     </div>
+                    {{ template "error" . }}
                     <div class="flex justify-end space-x-2">
-                        <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded"
+                        <button type="button" class="bg-gray-600 text-white px-2 py-1 rounded-lg"
                                 onclick="closeModal()">
                             Annuler
                         </button>
-                        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
+                        <button type="submit" class="bg-orange-600 text-white px-2 py-1 rounded-lg">
                             Envoyer
                         </button>
                     </div>
